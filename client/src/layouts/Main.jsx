@@ -7,14 +7,13 @@ const Main = () => {
         <div>
 
             {/* nabvar */}
-
             <Navbar></Navbar>
 
 
             {/* dynamic outlet */}
 
             <div className="min-h-[calc(100vh-306px)]">
-            <Outlet></Outlet>
+                <Outlet></Outlet>
             </div>
 
 

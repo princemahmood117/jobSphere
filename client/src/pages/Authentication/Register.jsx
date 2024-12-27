@@ -5,9 +5,10 @@ import logo from '../../assets/images/logo.png'
 import { useContext } from "react";
 import { AuthContext } from "../../provider/AuthProvider";
 import toast from "react-hot-toast";
+import { ImSpinner7 } from "react-icons/im";
 const Register = () => {
 
-  const {user,setUser,createUser,signInWithGoogle,updateUserProfile} = useContext(AuthContext)
+  const {user,setUser,createUser,signInWithGoogle,updateUserProfile,loading} = useContext(AuthContext)
 
   const navigate = useNavigate()
 
@@ -27,6 +28,7 @@ const Register = () => {
  
    }
 
+  //  create new user
   const handleCreateUser = async (e) => {
     e.preventDefault();
 
@@ -172,14 +174,23 @@ const Register = () => {
                   type='password'
                 />
               </div>
-              <div className='mt-6'>
+
+               <div>
+                  <button disabled={loading} type='submit' className='bg-gray-800 w-full rounded-md py-3 text-white hover:bg-gray-700 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50 duration-300 transform'>
+                    {loading ? <ImSpinner7 className='animate-spin m-auto text-xl' /> : "Register"}
+                  </button>
+               </div>
+
+
+              {/* <div className='mt-6'>
                 <button
                   type='submit'
                   className='w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-gray-800 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50'
                 >
                   Sign Up
                 </button>
-              </div>
+              </div> */}
+              
             </form>
   
             <div className='flex items-center justify-between mt-4'>

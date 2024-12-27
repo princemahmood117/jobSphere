@@ -6,9 +6,13 @@ import login from '../../assets/images/login.json'
 import { useContext } from "react";
 import { AuthContext } from "../../provider/AuthProvider";
 import toast from "react-hot-toast";
+import { ImSpinner7 } from "react-icons/im";
+
+
+
 const Login = () => {
 
-  const {user,signIn,signInWithGoogle} = useContext(AuthContext)
+  const {signIn,signInWithGoogle,loading} = useContext(AuthContext)
 
   const navigate = useNavigate()
 
@@ -154,12 +158,20 @@ const Login = () => {
                 />
               </div>
               <div className='mt-6'>
-                <button
+
+              <div>
+                <button disabled={loading} type='submit' className='bg-gray-800 w-full rounded-md py-3 text-white hover:bg-gray-700 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50 duration-300 transform'>
+                  {loading ? <ImSpinner7 className='animate-spin m-auto text-xl' /> : "Login"}
+                </button>
+              </div>
+
+                {/* <button
                   type='submit'
                   className='w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-gray-800 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50'
                 >
                   Sign In
-                </button>
+                </button> */}
+
               </div>
             </form>
   
