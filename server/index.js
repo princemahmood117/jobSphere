@@ -59,6 +59,33 @@ const client = new MongoClient(uri, {
       })
 
 
+      // save a job into database
+      app.post('/job', async(req,res) => {
+        const jobData = req.body;
+        const result = await jobsCollection.insertOne(jobData);
+        res.send(result)
+      })
+
+
+      // get jobs posted by specific user using email
+      app.get('/jobs/:email', async(req,res) => {
+        const email = req.params.email;
+        const query = { 'buyer.email' : email }   // query from database 
+        const result = await jobsCollection.find(query).toArray()
+        res.send(result)
+      })
+
+
+      // delete a job from database using id
+      app.delete('/job', async(req,res)=> {
+        const id = req.params.id;
+        const query = { _id : new ObjectId(id)}   // delete query from database using id
+        const result = await jobsCollection.deleteOne(query);
+        res.send(result);
+      })
+
+
+
 
 
 

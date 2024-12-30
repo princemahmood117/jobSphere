@@ -1,18 +1,40 @@
+import { useContext, useEffect, useState } from "react"
+import { AuthContext } from "../provider/AuthProvider"
+import axios from "axios"
+
 const MyPostedJobs = () => {
+
+  const {user} = useContext(AuthContext)
+
+  const [jobs,setJobs] = useState([])
+
+  useEffect(()=> {
+    const getData = async () => {
+      const {data} = await axios.get(`${import.meta.env.VITE_API_URL}/jobs/${user?.email}`)
+      setJobs(data)
+    }
+    getData()
+  },[user])
+
+  console.log(jobs);
+
+
     return (
       <section className='container px-4 mx-auto pt-12'>
         <div className='flex items-center gap-x-3'>
           <h2 className='text-lg font-medium text-gray-800 '>My Posted Jobs</h2>
   
           <span className='px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full '>
-            05 Jobs
+            {jobs.length} Job
           </span>
         </div>
   
         <div className='flex flex-col mt-6'>
           <div className='-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8'>
             <div className='inline-block min-w-full py-2 align-middle md:px-6 lg:px-8'>
-              <div className='overflow-hidden border border-gray-200  md:rounded-lg'>
+                <div className='overflow-hidden border border-gray-200  md:rounded-lg'>
+
+                {/* table heading */}
                 <table className='min-w-full divide-y divide-gray-200'>
                   <thead className='bg-gray-50'>
                     <tr>
@@ -59,35 +81,50 @@ const MyPostedJobs = () => {
                       </th>
                     </tr>
                   </thead>
+
+                  {/* table body */}
                   <tbody className='bg-white divide-y divide-gray-200 '>
-                    <tr>
+
+                    {
+                      jobs.map(job => (
+                        <tr key={job._id}>
+
+                          {/* job title */}
                       <td className='px-4 py-4 text-sm text-gray-500  whitespace-nowrap'>
-                        Build Dynamic Website
+                        {job.job_title}
                       </td>
-  
+
+                      {/* deadline */}
                       <td className='px-4 py-4 text-sm text-gray-500  whitespace-nowrap'>
-                        10/04/2024
+                        {new Date(job.deadline).toLocaleDateString()}
                       </td>
-  
+                        
+                        {/* price range */}
                       <td className='px-4 py-4 text-sm text-gray-500  whitespace-nowrap'>
-                        $100-$200
+                        ${job.min_price}-${job.max_price}
                       </td>
+
+                      {/* category */}
                       <td className='px-4 py-4 text-sm whitespace-nowrap'>
                         <div className='flex items-center gap-x-2'>
                           <p
                             className='px-3 py-1 rounded-full text-blue-500 bg-blue-100/60
                              text-xs'
                           >
-                            Web Development
+                            {job.category}
                           </p>
                         </div>
                       </td>
+
+                      {/* description */}
                       <td
                         title=''
                         className='px-4 py-4 text-sm text-gray-500  whitespace-nowrap'
                       >
-                        Lorem ipsum, dolor si adipisicing elit. Ex, provident?..
+                        {job.description}
                       </td>
+
+                      {/* edit and delete buttons */}
                       <td className='px-4 py-4 text-sm whitespace-nowrap'>
                         <div className='flex items-center gap-x-6'>
                           <button className='text-gray-500 transition-colors duration-200   hover:text-red-500 focus:outline-none'>
@@ -126,6 +163,9 @@ const MyPostedJobs = () => {
                         </div>
                       </td>
                     </tr>
+                      ))
+                    }
+
                   </tbody>
                 </table>
               </div>
