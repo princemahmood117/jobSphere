@@ -3,7 +3,7 @@ const cors = require('cors')
 require('dotenv').config()
 
 const port  = process.env.PORT || 5000;
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express()
 
 const corsOption = {
@@ -35,6 +35,26 @@ const client = new MongoClient(uri, {
       // get all jobs data from Db
       app.get('/jobs', async(req,res) => {
         const result = await jobsCollection.find().toArray()
+        res.send(result)
+      })
+
+
+      // get a single job data from db using job id
+      app.get('/job/:id', async(req,res) => {
+        const id = req.params.id;
+        const query = {_id : new ObjectId(id)}
+        const result = await jobsCollection.findOne(query);
+        res.send(result)
+      })
+
+
+
+      // save bid data into database
+      app.post('/bid', async(req,res) => {
+        const bidData = req.body;
+        console.log(bidData);  // data will be coming from front-end inside the req.body
+
+        const result = await bidsCollection.insertOne(bidData);
         res.send(result)
       })
 
