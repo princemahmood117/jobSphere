@@ -1,0 +1,4 @@
+db info
+
+user : jobSphere
+pass : job1234
