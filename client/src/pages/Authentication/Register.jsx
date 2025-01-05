@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import Lottie from "lottie-react";
 import register from '../../assets/images/register.json'
 import logo from '../../assets/images/logo.png'
@@ -11,6 +11,8 @@ const Register = () => {
   const {user,setUser,createUser,signInWithGoogle,updateUserProfile,loading} = useContext(AuthContext)
 
   const navigate = useNavigate()
+  const location = useLocation()
+  const from = location.state || '/'
 
   // googleSignIn
   const handleGoogleSignIn = async () => {
@@ -18,7 +20,8 @@ const Register = () => {
     try {
        await signInWithGoogle()
        toast.success('Sign Up successful')
-       navigate('/')
+      //  navigate('/')
+      navigate(from, {replace:true}) // যেহেতু এখন state নিয়ে কাজ হবে লগ-ইন/হোম এ যাওয়ার সময়, তাই state এর ভিত্তি তেই রি-ডাইরেক্ট করা ভালো
     }
  
     catch (error) {
@@ -48,7 +51,8 @@ const Register = () => {
       setUser({...user,photoURL:photo, displayName:name})
 
       toast.success('Sign Up Successfull')
-      navigate('/')
+      // navigate('/')
+      navigate(from, {replace:true})
     }
     catch (error) {
       console.log(error);

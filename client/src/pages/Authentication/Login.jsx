@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import Lottie from "lottie-react";
 // import loginBg from '../../assets/images/login.jpg'
 import logo from '../../assets/images/logo.png'
@@ -9,12 +9,13 @@ import toast from "react-hot-toast";
 import { ImSpinner7 } from "react-icons/im";
 
 
-
 const Login = () => {
 
   const {signIn,signInWithGoogle,loading} = useContext(AuthContext)
 
   const navigate = useNavigate()
+  const location = useLocation()
+  const from = location.state || '/'
 
   // google Sign In
   const handleGoogleSignIn = async () => {
@@ -22,7 +23,8 @@ const Login = () => {
    try {
       await signInWithGoogle()
       toast.success('Login successful')
-      navigate('/')
+      // navigate('/')
+      navigate(from, {replace:true})  // যেহেতু এখন state নিয়ে কাজ হবে লগ-ইন/হোম এ যাওয়ার সময়, তাই state এর ভিত্তি তেই রি-ডাইরেক্ট করা ভালো
    }
 
    catch (error) {
@@ -46,7 +48,8 @@ const Login = () => {
     try {
         await signIn(email,password)
         toast.success('login successful')
-        navigate('/')
+        // navigate('/')
+        navigate(from, {replace:true})
     }
 
     catch(err) {
