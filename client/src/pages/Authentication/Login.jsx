@@ -3,19 +3,26 @@ import Lottie from "lottie-react";
 // import loginBg from '../../assets/images/login.jpg'
 import logo from '../../assets/images/logo.png'
 import login from '../../assets/images/login.json'
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "../../provider/AuthProvider";
 import toast from "react-hot-toast";
 import { ImSpinner7 } from "react-icons/im";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 
 const Login = () => {
 
-  const {signIn,signInWithGoogle,loading} = useContext(AuthContext)
+  const {signIn,signInWithGoogle,loading,user} = useContext(AuthContext)
 
   const navigate = useNavigate()
   const location = useLocation()
-  const from = location.state || '/'
+  const from = location.state || '/';
+  
+  useEffect(()=>{
+    if(user) {
+      navigate('/')
+    }
+  },[navigate, user])
 
   // google Sign In
   const handleGoogleSignIn = async () => {
@@ -58,6 +65,8 @@ const Login = () => {
     }
 
   }
+
+  if(user || loading) return <LoadingSpinner></LoadingSpinner>
 
 
 

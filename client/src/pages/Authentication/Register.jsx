@@ -2,10 +2,11 @@ import { Link, useLocation, useNavigate } from "react-router-dom"
 import Lottie from "lottie-react";
 import register from '../../assets/images/register.json'
 import logo from '../../assets/images/logo.png'
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "../../provider/AuthProvider";
 import toast from "react-hot-toast";
 import { ImSpinner7 } from "react-icons/im";
+import LoadingSpinner from "../../components/LoadingSpinner";
 const Register = () => {
 
   const {user,setUser,createUser,signInWithGoogle,updateUserProfile,loading} = useContext(AuthContext)
@@ -13,6 +14,12 @@ const Register = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const from = location.state || '/'
+
+    useEffect(()=>{
+      if(user) {
+        navigate('/')
+      }
+    },[navigate, user])
 
   // googleSignIn
   const handleGoogleSignIn = async () => {
@@ -60,6 +67,7 @@ const Register = () => {
     }
 
   }
+  if(user || loading) return <LoadingSpinner></LoadingSpinner>
     return (
       <div className='flex justify-center items-center min-h-[calc(100vh-306px)] my-12'>
         <div className='flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg  lg:max-w-4xl '>
