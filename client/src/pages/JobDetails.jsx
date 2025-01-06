@@ -34,7 +34,7 @@ const JobDetails = () => {
         }
         const comment = form.comment.value;
         const email = user?.email;
-        const status = 'pending'
+        const status = 'Pending'
         const deadline = startDate;
 
 
@@ -46,7 +46,12 @@ const JobDetails = () => {
             job_title,
             category,
             email,
-            buyer_email : buyer?.email,
+            buyer : {
+              email : buyer?.email,
+              name : buyer?.name,
+              photo : buyer?.photoURL
+            },
+            
             status,
         }
         console.table(bidData);

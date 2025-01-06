@@ -104,11 +104,20 @@ const client = new MongoClient(uri, {
         res.send(result)
       })
 
-      
-      // get all bids from db using user
+
+      // get all bids from db using user email
       app.get('/my-bids/:email', async(req,res)=> {
         const email = req.params.email;
-        const query = { 'email' : email };
+        const query = { 'email' : email };  // according to email of who places the bid
+        const result = await bidsCollection.find(query).toArray();
+        res.send(result);
+      } )
+
+
+      // get all bids from db using buyer's email
+      app.get('/bid-requests/:email', async(req,res)=> {
+        const email = req.params.email;
+        const query = { 'buyer.email' : email };  // according to email of who places the bid
         const result = await bidsCollection.find(query).toArray();
         res.send(result);
       } )
