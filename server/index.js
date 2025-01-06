@@ -48,17 +48,6 @@ const client = new MongoClient(uri, {
       })
 
 
-
-      // save bid data into database
-      app.post('/bid', async(req,res) => {
-        const bidData = req.body;
-        console.log(bidData);  // data will be coming from front-end inside the req.body
-
-        const result = await bidsCollection.insertOne(bidData);
-        res.send(result)
-      })
-
-
       // save a job into database
       app.post('/job', async(req,res) => {
         const jobData = req.body;
@@ -100,6 +89,29 @@ const client = new MongoClient(uri, {
         const result = await jobsCollection.updateOne(query, updateDoc, options)
         res.send(result)
       })
+
+
+                                    // bid related api
+
+      
+
+      // save bid data into database
+      app.post('/bid', async(req,res) => {
+        const bidData = req.body;
+        console.log(bidData);  // data will be coming from front-end inside the req.body
+
+        const result = await bidsCollection.insertOne(bidData);
+        res.send(result)
+      })
+
+      
+      // get all bids from db using user
+      app.get('/my-bids/:email', async(req,res)=> {
+        const email = req.params.email;
+        const query = { 'email' : email };
+        const result = await bidsCollection.find(query).toArray();
+        res.send(result);
+      } )
 
 
 
