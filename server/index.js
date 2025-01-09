@@ -98,8 +98,7 @@ const client = new MongoClient(uri, {
       // save bid data into database
       app.post('/bid', async(req,res) => {
         const bidData = req.body;
-        console.log(bidData);  // data will be coming from front-end inside the req.body
-
+        // console.log(bidData);  // data will be coming from front-end inside the req.body
         const result = await bidsCollection.insertOne(bidData);
         res.send(result)
       })
@@ -121,6 +120,20 @@ const client = new MongoClient(uri, {
         const result = await bidsCollection.find(query).toArray();
         res.send(result);
       } )
+
+
+      // update bid status (patch for any specific data needs to be updated)
+      app.patch('/bid/:id', async(req,res) => {
+        const id = req.params.id;
+        const status = req.body;
+        const query = {_id : new ObjectId(id)};
+        const updateDoc = {
+          $set : status
+        }
+        const result = await bidsCollection.updateOne(query,updateDoc)
+        res.send(result)
+        // query দ্বারা id দিয়ে খুজেবো,পরে updateDoc এর মধ্যে কোন ভ্যালু কে আপডেট করতে চাই সেটি $set দিয়ে আপডেট করতে হবে 
+      })
 
 
 
