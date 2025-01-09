@@ -20,8 +20,9 @@ const BidRequests = () => {
   }
 
   const handleStatus = async(id, prevStatus ,status) => {
-    if(prevStatus === status) return toast.error("Action already done")
     console.log(id,prevStatus,status)
+    
+    if(prevStatus === status) return toast.error("Action already done")
 
     const {data} = await axios.patch(`${import.meta.env.VITE_API_URL}/bid/${id}`, {status})
     getData()
