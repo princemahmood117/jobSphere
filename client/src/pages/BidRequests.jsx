@@ -17,7 +17,11 @@ const BidRequests = () => {
     const {data} = await axios.get(`${import.meta.env.VITE_API_URL}/bid-requests/${user?.email}`)
     setBids(data)
   }
-  console.log(bids);
+
+  const handleStatus = () => {
+    
+  }
+  
 
     return (
       <section className='container px-4 mx-auto pt-12'>
@@ -49,7 +53,7 @@ const BidRequests = () => {
                         className='py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500'
                       >
                         <div className='flex items-center gap-x-3'>
-                          <span>Email</span>
+                          <span>Email (who applied)</span>
                         </div>
                       </th>
   

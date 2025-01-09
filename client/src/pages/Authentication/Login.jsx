@@ -66,7 +66,7 @@ const Login = () => {
 
   }
 
-  if(user || loading) return <LoadingSpinner></LoadingSpinner>
+  if(user|| loading) return <LoadingSpinner></LoadingSpinner>
 
 
 
