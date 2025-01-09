@@ -15,6 +15,7 @@ const MyBids = () => {
   const getData = async () => {
     const {data} = await axios.get(`${import.meta.env.VITE_API_URL}/my-bids/${user?.email}`)
     setBids(data)
+    getData()
   }
 
   console.log(bids);
