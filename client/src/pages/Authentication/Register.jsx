@@ -7,6 +7,7 @@ import { AuthContext } from "../../provider/AuthProvider";
 import toast from "react-hot-toast";
 import { ImSpinner7 } from "react-icons/im";
 import LoadingSpinner from "../../components/LoadingSpinner";
+import axios from "axios";
 const Register = () => {
 
   const {user,setUser,createUser,signInWithGoogle,updateUserProfile,loading} = useContext(AuthContext)
@@ -52,10 +53,15 @@ const Register = () => {
 
     try {
 
-      await createUser(email,password)
+      const result = await createUser(email,password)
 
       await updateUserProfile(name,photo)
-      setUser({...user,photoURL:photo, displayName:name})
+      // optimistic ui update
+      setUser({...result?.user,photoURL:photo, displayName:name})
+
+      console.log(result.user);
+      const {data} = await axios.post(`${import.meta.env.VITE_API_URL}/jwt`, {email: result?.user?.email},{withCredentials:true})
+      console.log(data);
 
       toast.success('Sign Up Successfull')
       // navigate('/')

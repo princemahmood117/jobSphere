@@ -8,6 +8,7 @@ import { AuthContext } from "../../provider/AuthProvider";
 import toast from "react-hot-toast";
 import { ImSpinner7 } from "react-icons/im";
 import LoadingSpinner from "../../components/LoadingSpinner";
+import axios from "axios";
 
 
 const Login = () => {
@@ -28,7 +29,11 @@ const Login = () => {
   const handleGoogleSignIn = async () => {
 
    try {
-      await signInWithGoogle()
+      const result = await signInWithGoogle()
+      console.log(result.user);
+      const {data} = await axios.post(`${import.meta.env.VITE_API_URL}/jwt`, {email: result?.user?.email},{withCredentials:true})
+      console.log(data);
+
       toast.success('Login successful')
       // navigate('/')
       navigate(from, {replace:true})  // যেহেতু এখন state নিয়ে কাজ হবে লগ-ইন/হোম এ যাওয়ার সময়, তাই state এর ভিত্তি তেই রি-ডাইরেক্ট করা ভালো
@@ -50,10 +55,12 @@ const Login = () => {
     const email = form.email.value;
     const password = form.password.value;
 
-    console.log({email, password});
-
     try {
-        await signIn(email,password)
+        const result = await signIn(email,password)
+        console.log(result.user);
+        const {data} = await axios.post(`${import.meta.env.VITE_API_URL}/jwt`, {email: result?.user?.email},{withCredentials:true})
+        console.log(data);
+        
         toast.success('login successful')
         // navigate('/')
         navigate(from, {replace:true})
