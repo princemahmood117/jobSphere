@@ -44,6 +44,16 @@ const client = new MongoClient(uri, {
         }).send({success:true})
       })
 
+      // clear token on logout
+      app.get('/logout', async(req,res) => {
+        res.clearCookie('token', {
+          httpOnly : true,
+          secure : process.env.NODE_ENV === 'production'? 'none' : 'strict',
+          sameSite : process.env.NODE_ENV === 'production' ? 'none' : 'strict',
+          maxAge : 0
+        }).send({success:true})
+      })
+
   
       // get all jobs data from Db
       app.get('/jobs', async(req,res) => {
