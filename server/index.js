@@ -1,10 +1,10 @@
 const express = require('express')
 const cors = require('cors')
 require('dotenv').config()
-
+const jwt = require('jsonwebtoken')
 const port  = process.env.PORT || 5000;
-const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express()
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 const corsOption = {
     origin : ['http://localhost:5173'],
@@ -30,6 +30,12 @@ const client = new MongoClient(uri, {
     try {
       const jobsCollection = client.db('jobSphere').collection('jobs')
       const bidsCollection = client.db('jobSphere').collection('bids')
+
+      // jwt generate
+      app.post('/jwt', async(req,res) => {
+        const user = req.body;
+        const token = jwt.sign(user,process.env.ACCESS_TOKEN)
+      })
 
   
       // get all jobs data from Db
