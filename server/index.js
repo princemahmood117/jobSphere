@@ -15,6 +15,7 @@ const corsOption = {
 
 app.use(cors(corsOption))
 app.use(express.json())
+app.use(cookieParser())
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ddujh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
@@ -81,6 +82,18 @@ const client = new MongoClient(uri, {
 
       // get jobs posted by specific user using email
       app.get('/jobs/:email', async(req,res) => {
+        const token = req.cookies?.token;
+        console.log('token from browser', token);
+        if(token) {
+          jwt.verify(token, process.env.ACCESS_TOKEN, (err,decoded)=> {
+            if(err) {
+              return console.log(err);
+            }
+            
+            console.log(decoded);
+          } )
+        }
+
         const email = req.params.email;
         const query = { 'buyer.email' : email }   // query from database 
         const result = await jobsCollection.find(query).toArray()
