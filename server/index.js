@@ -17,6 +17,29 @@ app.use(cors(corsOption))
 app.use(express.json())
 app.use(cookieParser())
 
+// verify jwt token
+const verifyToken = (req,res,next) => {
+  console.log('this is a middleware');
+       // token verification 
+       const token = req.cookies?.token;  // token is received from the browser's cookie
+       console.log('token from browser', token);
+       if(!token) return res.status(401).send({message : "Dhukte parba naaaa"})
+
+       if(token) {
+         jwt.verify(token, process.env.ACCESS_TOKEN, (err,decoded)=> {
+           if(err) {
+            console.log(err);
+             return res.status(401).send({message : "Vul token niye ashcho"})
+           }
+
+           console.log(decoded);
+           req.user = decoded
+           next()
+         })
+       }
+}
+
+
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ddujh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -80,21 +103,18 @@ const client = new MongoClient(uri, {
       })
 
 
+
       // get jobs posted by specific user using email
-      app.get('/jobs/:email', async(req,res) => {
-        const token = req.cookies?.token;
-        console.log('token from browser', token);
-        if(token) {
-          jwt.verify(token, process.env.ACCESS_TOKEN, (err,decoded)=> {
-            if(err) {
-              return console.log(err);
-            }
-            
-            console.log(decoded);
-          } )
-        }
+      app.get('/jobs/:email',verifyToken, async(req,res) => {
+        const tokenEmail = req.user.email;
+        console.log('this email is from inside the token data',tokenEmail);
 
         const email = req.params.email;
+
+        if(tokenEmail !== email) {
+          return res.status(403).send({message : "token email match kore nai, forbidden"})
+        }
+
         const query = { 'buyer.email' : email }   // query from database 
         const result = await jobsCollection.find(query).toArray()
         res.send(result)
@@ -102,7 +122,7 @@ const client = new MongoClient(uri, {
 
 
       // delete a job from database using id
-      app.delete('/job/:id', async(req,res)=> {
+      app.delete('/job/:id',verifyToken, async(req,res)=> {
         const id = req.params.id;
         const query = { _id : new ObjectId(id)}   // delete query from database using id
         const result = await jobsCollection.deleteOne(query);
@@ -111,7 +131,7 @@ const client = new MongoClient(uri, {
 
 
       // update a job using job id
-      app.put('/job/:id', async(req,res) => {
+      app.put('/job/:id',verifyToken, async(req,res) => {
         const id = req.params.id;
         const jobData = req.body;
         const query = {_id : new ObjectId(id)};
@@ -125,6 +145,7 @@ const client = new MongoClient(uri, {
         const result = await jobsCollection.updateOne(query, updateDoc, options)
         res.send(result)
       })
+
 
 
                                     // bid related api
@@ -141,7 +162,7 @@ const client = new MongoClient(uri, {
 
 
       // get all bids from db using user email
-      app.get('/my-bids/:email', async(req,res)=> {
+      app.get('/my-bids/:email',verifyToken, async(req,res)=> {
         const email = req.params.email;
         const query = { 'email' : email };  // according to email of who places the bid
         const result = await bidsCollection.find(query).toArray();
@@ -149,8 +170,8 @@ const client = new MongoClient(uri, {
       } )
 
 
-      // get all bids from db using buyer's email
-      app.get('/bid-requests/:email', async(req,res)=> {
+      // get all bid requests from db using buyer's (owner) email
+      app.get('/bid-requests/:email',verifyToken, async(req,res)=> {
         const email = req.params.email;
         const query = { 'buyer.email' : email };  // according to email of who places the bid
         const result = await bidsCollection.find(query).toArray();
@@ -159,7 +180,7 @@ const client = new MongoClient(uri, {
 
 
       // update bid status (patch for any specific data needs to be updated)
-      app.patch('/bid/:id', async(req,res) => {
+      app.patch('/bid/:id',verifyToken, async(req,res) => {
         const id = req.params.id;
         const status = req.body;
         const query = {_id : new ObjectId(id)};
@@ -180,8 +201,6 @@ const client = new MongoClient(uri, {
       console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } 
     
-
-
 
 
     finally {
