@@ -11,7 +11,7 @@ const PrivateRoute = ({ children }) => {
   if (loading) {
     return (
         <div className="flex justify-center items-center mt-6">
-            {/*  green triangle */}
+            {/*  red triangle */}
           <Triangle
             visible={true}
             height="80"

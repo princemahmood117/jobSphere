@@ -2,7 +2,7 @@
 // import axios from "axios"
 import toast from "react-hot-toast";
 import useAxiosSecure from "../hooks/useAxiosSecure";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import useAuth from "../hooks/useAuth";
 import { Triangle } from "react-loader-spinner";
 
@@ -19,9 +19,6 @@ const BidRequests = () => {
     queryFn: () => getData(),
     queryKey: ["bids"],
   });
-
-  console.log(bids);
-  console.log(isLoading);
 
   const { user } = useAuth();
 
@@ -40,15 +37,37 @@ const BidRequests = () => {
     return data;
   };
 
+
+  // mutation is for put,patch,delete request
+
+  const {mutateAsync} = useMutation({
+    mutationFn : async ({id,status}) => {
+      const { data } = await axiosSecure.patch(`/bid/${id}`, { status });
+      console.log(data);
+      return data;
+      
+    },
+
+    onSuccess : () =>  {
+      console.log('Data update hoise');
+      toast.success('status Updated')
+      refetch()
+    }
+    
+  })
+
   const handleStatus = async (id, prevStatus, status) => {
     console.log(id, prevStatus, status);
 
     if (prevStatus === status) return toast.error("Action already done");
+    await mutateAsync({id,status})
 
-    const { data } = await axiosSecure.patch(`/bid/${id}`, { status });
-    getData();
-    console.log(data);
+    // const { data } = await axiosSecure.patch(`/bid/${id}`, { status });
+    // getData();
+    // console.log(data);
   };
+
+
 
   if (isLoading) {
     return (
