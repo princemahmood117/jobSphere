@@ -77,6 +77,7 @@ const Login = () => {
   }
 
   if(user || loading) return <div className="flex justify-center items-center mt-6">
+    {/* rounded triangle */}
              <BallTriangle
                height={100}
                width={100}
