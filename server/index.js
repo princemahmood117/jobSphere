@@ -17,13 +17,14 @@ app.use(cors(corsOption))
 app.use(express.json())
 app.use(cookieParser())
 
+
 // verify jwt token
 const verifyToken = (req,res,next) => {
   console.log('this is a middleware');
        // token verification 
        const token = req.cookies?.token;  // token is received from the browser's cookie
        console.log('token from browser', token);
-       if(!token) return res.status(401).send({message : "Dhukte parba naaaa"})
+       if(!token) return res.status(401).send({message : "token nai Dhukte parba naaaa"})
 
        if(token) {
          jwt.verify(token, process.env.ACCESS_TOKEN, (err,decoded)=> {
@@ -56,10 +57,11 @@ const client = new MongoClient(uri, {
       const jobsCollection = client.db('jobSphere').collection('jobs')
       const bidsCollection = client.db('jobSphere').collection('bids')
 
+
       // jwt generate
       app.post('/jwt', async(req,res) => {
-        const user = req.body;
-        const token = jwt.sign(user,process.env.ACCESS_TOKEN,{expiresIn:'365d'})
+        const userEmail = req.body;
+        const token = jwt.sign(userEmail,process.env.ACCESS_TOKEN,{expiresIn:'365d'})
 
         res.cookie('token' , token, {
           httpOnly : true,
@@ -67,6 +69,8 @@ const client = new MongoClient(uri, {
           sameSite : process.env.NODE_ENV === 'production' ? 'none' : 'strict',
         }).send({success:true})
       })
+
+
 
       // clear token on logout
       app.get('/logout', async(req,res) => {

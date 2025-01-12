@@ -72,7 +72,7 @@ const TabCategories = () => {
             }
           </div>
         </TabPanel>
-      </div>
+        </div>
     </Tabs>
   );
 };

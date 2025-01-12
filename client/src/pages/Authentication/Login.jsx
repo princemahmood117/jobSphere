@@ -3,17 +3,20 @@ import Lottie from "lottie-react";
 // import loginBg from '../../assets/images/login.jpg'
 import logo from '../../assets/images/logo.png'
 import login from '../../assets/images/login.json'
-import { useContext, useEffect } from "react";
-import { AuthContext } from "../../provider/AuthProvider";
+import {  useEffect } from "react";
+// import { AuthContext } from "../../provider/AuthProvider";
 import toast from "react-hot-toast";
 import { ImSpinner7 } from "react-icons/im";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import axios from "axios";
+import useAuth from "../../hooks/useAuth";
 
 
 const Login = () => {
 
-  const {signIn,signInWithGoogle,loading,user} = useContext(AuthContext)
+  // const {signIn,signInWithGoogle,loading,user} = useContext(AuthContext)
+
+  const {signIn,signInWithGoogle,loading,user} = useAuth()
 
   const navigate = useNavigate()
   const location = useLocation()

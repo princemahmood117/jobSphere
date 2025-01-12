@@ -2,15 +2,18 @@ import { Link, useLocation, useNavigate } from "react-router-dom"
 import Lottie from "lottie-react";
 import register from '../../assets/images/register.json'
 import logo from '../../assets/images/logo.png'
-import { useContext, useEffect } from "react";
-import { AuthContext } from "../../provider/AuthProvider";
+import {  useEffect } from "react";
+// import { AuthContext } from "../../provider/AuthProvider";
 import toast from "react-hot-toast";
 import { ImSpinner7 } from "react-icons/im";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import axios from "axios";
+import useAuth from "../../hooks/useAuth";
 const Register = () => {
 
-  const {user,setUser,createUser,signInWithGoogle,updateUserProfile,loading} = useContext(AuthContext)
+  // const {user,setUser,createUser,signInWithGoogle,updateUserProfile,loading} = useContext(AuthContext)
+
+  const {user,setUser,createUser,signInWithGoogle,updateUserProfile,loading} = useAuth()
 
   const navigate = useNavigate()
   const location = useLocation()
