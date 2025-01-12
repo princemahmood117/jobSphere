@@ -7,9 +7,9 @@ import {  useEffect } from "react";
 // import { AuthContext } from "../../provider/AuthProvider";
 import toast from "react-hot-toast";
 import { ImSpinner7 } from "react-icons/im";
-import LoadingSpinner from "../../components/LoadingSpinner";
 import axios from "axios";
 import useAuth from "../../hooks/useAuth";
+import { BallTriangle } from "react-loader-spinner";
 
 
 const Login = () => {
@@ -76,7 +76,18 @@ const Login = () => {
 
   }
 
-  if(user|| loading) return <LoadingSpinner></LoadingSpinner>
+  if(user || loading) return <div className="flex justify-center items-center mt-6">
+             <BallTriangle
+               height={100}
+               width={100}
+               radius={5}
+               color="#4fa94d"
+               ariaLabel="ball-triangle-loading"
+               wrapperStyle={{}}
+               wrapperClass=""
+               visible={true}
+             />
+           </div>
 
 
 

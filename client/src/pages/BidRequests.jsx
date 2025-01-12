@@ -1,12 +1,15 @@
 import { useContext, useEffect, useState } from "react"
 import { AuthContext } from "../provider/AuthProvider"
-import axios from "axios"
+// import axios from "axios"
 import toast from "react-hot-toast"
+import useAxiosSecure from "../hooks/useAxiosSecure"
 
 
 const BidRequests = () => {
   
   const {user} = useContext(AuthContext)
+
+  const axiosSecure = useAxiosSecure()
 
   const [bids,setBids] = useState([])
 
@@ -15,7 +18,9 @@ const BidRequests = () => {
   },[user])
 
   const getData = async () => {
-    const {data} = await axios.get(`${import.meta.env.VITE_API_URL}/bid-requests/${user?.email}`)
+    // const {data} = await axiosSecure.get(`${import.meta.env.VITE_API_URL}/bid-requests/${user?.email}`)
+
+    const {data} = await axiosSecure.get(`/bid-requests/${user?.email}`)
     setBids(data)
   }
 
@@ -24,7 +29,7 @@ const BidRequests = () => {
     
     if(prevStatus === status) return toast.error("Action already done")
 
-    const {data} = await axios.patch(`${import.meta.env.VITE_API_URL}/bid/${id}`, {status})
+    const {data} = await axiosSecure.patch(`/bid/${id}`, {status})
     getData()
     console.log(data);
     
@@ -178,7 +183,7 @@ const BidRequests = () => {
                       <td className='px-4 py-4 text-sm whitespace-nowrap'>
                         <div className='flex items-center gap-x-6'>
                           {/* accept button */}
-                          <button disabled={bid.status === 'Complete'} onClick={()=> handleStatus(bid._id, bid.status, 'In Progress')} className='disabled:cursor-not-allowed text-gray-500 transition-colors duration-200   hover:text-red-500 focus:outline-none'>
+                          <button title="accept" disabled={bid.status === 'Complete'} onClick={()=> handleStatus(bid._id, bid.status, 'In Progress')} className='disabled:cursor-not-allowed text-gray-500 transition-colors duration-200   hover:text-red-500 focus:outline-none'>
                             <svg
                               xmlns='http://www.w3.org/2000/svg'
                               fill='none'
@@ -196,7 +201,7 @@ const BidRequests = () => {
                           </button>
                             
                           {/* reject button */}
-                          <button disabled={bid.status === 'Complete'} onClick={()=> handleStatus(bid._id, bid.status, 'Rejected')} className='text-gray-500 transition-colors duration-200   hover:text-yellow-500 focus:outline-none'>
+                          <button title="reject" disabled={bid.status === 'Complete'} onClick={()=> handleStatus(bid._id, bid.status, 'Rejected')} className='text-gray-500 transition-colors duration-200   hover:text-yellow-500 focus:outline-none'>
                             <svg
                               xmlns='http://www.w3.org/2000/svg'
                               fill='none'
