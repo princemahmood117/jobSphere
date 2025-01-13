@@ -1,10 +1,15 @@
 import axios from "axios"
-import { useEffect, useState } from "react"
+// import { useEffect, useState } from "react"
 import JobCard from "../components/JobCard"
+import { useEffect, useState } from "react"
+import { Triangle } from "react-loader-spinner"
+import useAuth from "../hooks/useAuth"
+// import { useQuery } from "@tanstack/react-query"
 
 const AllJobs = () => {
 
     const [jobs,setJobs] = useState([])
+    const {loading} = useAuth()
 
     useEffect(()=> {
       const getData = async () => {
@@ -13,7 +18,39 @@ const AllJobs = () => {
       }
       getData()
     },[])
-  const pages = [1, 2, 3, 4, 5]
+
+
+    const pages = [1, 2, 3, 4, 5]
+
+
+                    //  data fatched by tanstack query
+    // const {data:jobs=[]} = useQuery({
+    //   queryFn : ()=>  getData(),
+    //   queryKey : ['all-jobs']
+    // })
+
+    // const getData = async () => {
+    //   const {data} = await axios.get(`${import.meta.env.VITE_API_URL}/jobs`)
+    //   console.log(data);
+    //   return data;
+    // }
+  
+
+   if (loading) {
+      return (
+        <div className="flex justify-center items-center mt-6">
+          <Triangle
+            visible={true}
+            height="80"
+            width="80"
+            color="#4fa94d"
+            ariaLabel="triangle-loading"
+            wrapperStyle={{}}
+            wrapperClass=""
+          />
+        </div>
+      );
+    }
   return (
     <div className='container px-6 py-10 mx-auto min-h-[calc(100vh-306px)] flex flex-col justify-between'>
       <div>
@@ -67,8 +104,10 @@ const AllJobs = () => {
         </div>
       </div>
 
+
       <div className='flex justify-center mt-12'>
-        <button className='px-4 py-2 mx-1 text-gray-700 disabled:text-gray-500 capitalize bg-gray-200 rounded-md disabled:cursor-not-allowed disabled:hover:bg-gray-200 disabled:hover:text-gray-500 hover:bg-blue-500  hover:text-white'>
+        {/* previous button */}
+        <button className='px-4 py-2 mx-1 text-gray-700 disabled:text-gray-500 capitalize bg-gray-200 rounded-md disabled:cursor-not-allowed disabled:hover:bg-gray-200 disabled:hover:text-gray-500 hover:bg-blue-500  hover:text-white duration-300'>
           <div className='flex items-center -mx-1'>
             <svg
               xmlns='http://www.w3.org/2000/svg'
@@ -89,6 +128,7 @@ const AllJobs = () => {
           </div>
         </button>
 
+          {/* page numbers */}
         {pages.map(btnNum => (
           <button
             key={btnNum}
@@ -98,6 +138,7 @@ const AllJobs = () => {
           </button>
         ))}
 
+        {/* next button */}
         <button className='px-4 py-2 mx-1 text-gray-700 transition-colors duration-300 transform bg-gray-200 rounded-md hover:bg-blue-500 disabled:hover:bg-gray-200 disabled:hover:text-gray-500 hover:text-white disabled:cursor-not-allowed disabled:text-gray-500'>
           <div className='flex items-center -mx-1'>
             <span className='mx-1'>Next</span>
