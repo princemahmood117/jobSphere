@@ -21,10 +21,13 @@ const MyPostedJobs = () => {
     try {
       const { data } = await axiosSecure.get(`/jobs/${user?.email}`);
       setJobs(data);
-    } catch (error) {
+    } 
+    catch (error) {
       toast.error("Failed to fetch jobs");
       console.error(error);
-    } finally {
+    } 
+    
+    finally {
       setLoading(false); // End loading
     }
   };

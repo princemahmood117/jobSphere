@@ -19,7 +19,6 @@ const MyBids = () => {
     // const {data} = await axiosSecure.get(`${import.meta.env.VITE_API_URL}/my-bids/${user?.email}`)
 
     const {data} = await axiosSecure.get(`/my-bids/${user?.email}`)
-
     setBids(data)
     getData()
   }

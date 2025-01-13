@@ -2,19 +2,22 @@
 // import axios from "axios"
 import toast from "react-hot-toast";
 import useAxiosSecure from "../hooks/useAxiosSecure";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import useAuth from "../hooks/useAuth";
 import { Triangle } from "react-loader-spinner";
 
-const BidRequests = () => {
-  //  fetch data using tanstack query
 
+
+const BidRequests = () => {
+
+  const queryClient = useQueryClient()
+
+  //  fetch data using tanstack query
   const {
     data: bids = [],
     isLoading,
-    isError,
     refetch,
-    error,
+
   } = useQuery({
     queryFn: () => getData(),
     queryKey: ["bids"],
@@ -44,14 +47,19 @@ const BidRequests = () => {
     mutationFn : async ({id,status}) => {
       const { data } = await axiosSecure.patch(`/bid/${id}`, { status });
       console.log(data);
-      return data;
-      
+      return data;  
     },
 
     onSuccess : () =>  {
       console.log('Data update hoise');
       toast.success('status Updated')
-      refetch()
+      // refetch()
+
+      // without using refetch, we will use hard way called 'invalidateQueries'
+
+      queryClient.invalidateQueries({
+        queryKey : ['bids']
+      })
     }
     
   })

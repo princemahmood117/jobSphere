@@ -3,6 +3,7 @@ import { AuthContext } from "../provider/AuthProvider";
 import { Navigate, useLocation } from "react-router-dom";
 import { Triangle } from "react-loader-spinner";
 
+// eslint-disable-next-line react/prop-types
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useContext(AuthContext);
 
