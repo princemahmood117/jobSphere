@@ -158,8 +158,19 @@ const client = new MongoClient(uri, {
 
       // save bid data into database
       app.post('/bid', async(req,res) => {
-        const bidData = req.body;
+        const bidData = req.body; 
         // console.log(bidData);  // data will be coming from front-end inside the req.body
+
+        // check if dupicate bid is present already in db
+        const query = {
+          email : bidData.email,
+          jobId : bidData.jobId
+         }
+         const alreadyApplied = await bidsCollection.findOne(query)
+         if(alreadyApplied) {
+          return res.status(400).send({message : 'Bid already been placed on this job'})
+         }
+         
         const result = await bidsCollection.insertOne(bidData);
         res.send(result)
       })

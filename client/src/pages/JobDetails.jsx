@@ -8,11 +8,14 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import toast from "react-hot-toast";
+import useAxiosSecure from "../hooks/useAxiosSecure";
 
 const JobDetails = () => {
     
     const job = useLoaderData()
     const {category,job_title,deadline,description,min_price,max_price,_id,buyer} = job || {};
+
+    const axiosSecure = useAxiosSecure()
 
     const {user} = useContext(AuthContext)
     const navigate = useNavigate()
@@ -52,21 +55,22 @@ const JobDetails = () => {
               name : buyer?.name,
               photo : buyer?.photoURL
             },
-            
             status,
         }
         console.table(bidData);
 
         try {
-          const {data} = await axios.post(`${import.meta.env.VITE_API_URL}/bid`, bidData)
+          const {data} = await axiosSecure.post(`/bid`, bidData)
           console.log(data);
           toast.success('bid placed successfully')
           navigate('/my-bids')
         }
-        catch(error){
-          toast.error(error.message)
-          console.log(error);
+
+        catch(error) {
+          toast.error(error.response.data.message); // Access the message key
+          form.reset()
         }
+        
     }
     return (
       <div className='flex flex-col md:flex-row justify-around gap-5  items-center min-h-[calc(100vh-306px)] md:max-w-screen-xl mx-auto '>
@@ -124,6 +128,7 @@ const JobDetails = () => {
                   id='price'
                   type='text'
                   name='price'
+                  required
                   className='block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md   focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40  focus:outline-none focus:ring'
                 />
               </div>
@@ -146,7 +151,8 @@ const JobDetails = () => {
                 <label className='text-gray-700 ' htmlFor='comment'>
                   Comment
                 </label>
-                <input
+                <textarea 
+                  rows={2}
                   id='comment'
                   name='comment'
                   type='text'

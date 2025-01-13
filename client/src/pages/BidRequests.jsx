@@ -9,23 +9,19 @@ import { Triangle } from "react-loader-spinner";
 
 
 const BidRequests = () => {
+  
+  const { user } = useAuth();
+
+  const axiosSecure = useAxiosSecure();
 
   const queryClient = useQueryClient()
 
   //  fetch data using tanstack query
-  const {
-    data: bids = [],
-    isLoading,
-    refetch,
+  const {data: bids = [],isLoading,refetch} = useQuery({
 
-  } = useQuery({
     queryFn: () => getData(),
-    queryKey: ["bids"],
+    queryKey: ["bids", user?.email],
   });
-
-  const { user } = useAuth();
-
-  const axiosSecure = useAxiosSecure();
 
   // const [bids,setBids] = useState([])
 
@@ -52,11 +48,10 @@ const BidRequests = () => {
 
     onSuccess : () =>  {
       console.log('Data update hoise');
-      toast.success('status Updated')
+      toast.success('status updated')
       // refetch()
 
-      // without using refetch, we will use hard way called 'invalidateQueries'
-
+      // instead of refetch, we will use hard way called 'invalidateQueries'
       queryClient.invalidateQueries({
         queryKey : ['bids']
       })

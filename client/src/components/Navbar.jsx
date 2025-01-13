@@ -8,10 +8,12 @@ const Navbar = () => {
   return (
     <div className="navbar bg-base-100 shadow-md container px-4 mx-auto">
       <div className="flex-1">
+        
         <Link to='/' className="flex gap-2 items-center">
           <img className="w-auto h-7" src={logo} alt="" />
           <span className="font-bold">SoloSphere</span>
         </Link>
+
       </div>
       <div className="flex-none">
         <ul className="menu menu-horizontal px-1">

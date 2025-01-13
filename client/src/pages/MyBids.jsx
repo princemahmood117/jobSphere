@@ -1,11 +1,13 @@
-import { useContext, useEffect, useState } from "react"
-import { AuthContext } from "../provider/AuthProvider"
+import { useEffect, useState } from "react"
+
 // import axios from "axios"
 import useAxiosSecure from "../hooks/useAxiosSecure"
+import useAuth from "../hooks/useAuth"
+import { Triangle } from "react-loader-spinner"
 
 const MyBids = () => {
 
-  const {user} = useContext(AuthContext)
+  const {user,loading} = useAuth()
 
   const [bids,setBids] = useState([])
 
@@ -30,6 +32,22 @@ const MyBids = () => {
     console.log(data);
     getData()
   }
+
+   if (loading) {
+      return (
+        <div className="flex justify-center items-center mt-6">
+          <Triangle
+            visible={true}
+            height="80"
+            width="80"
+            color="#e74c3c"
+            ariaLabel="triangle-loading"
+            wrapperStyle={{}}
+            wrapperClass=""
+          />
+        </div>
+      );
+    }
 
   
     return (
