@@ -1,5 +1,4 @@
 import axios from "axios"
-// import { useEffect, useState } from "react"
 import JobCard from "../components/JobCard"
 import { useEffect, useState } from "react"
 import { Triangle } from "react-loader-spinner"
@@ -8,19 +7,43 @@ import useAuth from "../hooks/useAuth"
 
 const AllJobs = () => {
 
-    const [jobs,setJobs] = useState([])
     const {loading} = useAuth()
+    const [jobs,setJobs] = useState([])
+
+    const [itemsPerPage,setItemsPerPage] = useState(4)
+
+    const [jobsCount,setJobsCount] = useState(0)
+
+    const [currentPage,setCurrentPage] = useState(1)
 
     useEffect(()=> {
       const getData = async () => {
-        const {data} = await axios.get(`${import.meta.env.VITE_API_URL}/jobs`)
+        const {data} = await axios.get(`${import.meta.env.VITE_API_URL}/all-jobs?page=${currentPage}&size=${itemsPerPage}`)
         setJobs(data)
+        setJobsCount(data.length)
       }
       getData()
+    },[currentPage, itemsPerPage])
+
+
+    // for counting amount of data
+    useEffect(()=> {
+      const getCount = async () => {
+        const {data} = await axios.get(`${import.meta.env.VITE_API_URL}/jobs-count`)  // database থেকে টোটাল জবস নাম্বার টা data তে আসবে
+        setJobsCount(data.count)
+      }
+      getCount()
     },[])
 
+    const numberOfPages = Math.ceil(jobsCount/itemsPerPage)
 
-    const pages = [1, 2, 3, 4, 5]
+    const pages = [...Array(numberOfPages).keys().map(e => e + 1 )]
+
+
+    const handlePagination = (value) => {
+      console.log(value);
+      setCurrentPage(value)
+    }
 
 
                     //  data fatched by tanstack query
@@ -53,9 +76,12 @@ const AllJobs = () => {
     }
   return (
     <div className='container px-6 py-10 mx-auto min-h-[calc(100vh-306px)] flex flex-col justify-between'>
+      <p>total data length : {jobsCount}</p>
       <div>
+         
         <div className='flex flex-col md:flex-row justify-center items-center gap-5 '>
           <div>
+           
             <select
               name='category'
               id='category'
@@ -131,6 +157,7 @@ const AllJobs = () => {
           {/* page numbers */}
         {pages.map(btnNum => (
           <button
+          onClick={() => handlePagination(btnNum)}
             key={btnNum}
             className={`hidden px-4 py-2 mx-1 transition-colors duration-300 transform  rounded-md sm:inline hover:bg-blue-500  hover:text-white`}
           >
