@@ -8,42 +8,46 @@ import useAuth from "../hooks/useAuth"
 const AllJobs = () => {
 
     const {loading} = useAuth()
+
     const [jobs,setJobs] = useState([])
 
-    const [itemsPerPage,setItemsPerPage] = useState(4)
+    const [itemsPerPage,setItemsPerPage] = useState(10)
 
-    const [jobsCount,setJobsCount] = useState(0)
+    const [count,setCount] = useState(0)
 
     const [currentPage,setCurrentPage] = useState(1)
 
+
+    // data fetch
     useEffect(()=> {
       const getData = async () => {
         const {data} = await axios.get(`${import.meta.env.VITE_API_URL}/all-jobs?page=${currentPage}&size=${itemsPerPage}`)
         setJobs(data)
-        setJobsCount(data.length)
       }
       getData()
     },[currentPage, itemsPerPage])
 
 
-    // for counting amount of data
+    const handlePaginationButton = (value) => {
+      console.log(value);
+      setCurrentPage(value) // ekhon kon page e achi
+    }
+
+
+    // total data count
     useEffect(()=> {
       const getCount = async () => {
-        const {data} = await axios.get(`${import.meta.env.VITE_API_URL}/jobs-count`)  // database থেকে টোটাল জবস নাম্বার টা data তে আসবে
-        setJobsCount(data.count)
+        const {data} = await axios.get(`${import.meta.env.VITE_API_URL}/jobs-count`)
+        setCount(data.count)
       }
       getCount()
     },[])
 
-    const numberOfPages = Math.ceil(jobsCount/itemsPerPage)
+
+    const numberOfPages = Math.ceil(count/itemsPerPage)
 
     const pages = [...Array(numberOfPages).keys().map(e => e + 1 )]
 
-
-    const handlePagination = (value) => {
-      console.log(value);
-      setCurrentPage(value)
-    }
 
 
                     //  data fatched by tanstack query
@@ -76,7 +80,7 @@ const AllJobs = () => {
     }
   return (
     <div className='container px-6 py-10 mx-auto min-h-[calc(100vh-306px)] flex flex-col justify-between'>
-      <p>total data length : {jobsCount}</p>
+      <p>total data length : {count}</p>
       <div>
          
         <div className='flex flex-col md:flex-row justify-center items-center gap-5 '>
@@ -133,7 +137,10 @@ const AllJobs = () => {
 
       <div className='flex justify-center mt-12'>
         {/* previous button */}
-        <button className='px-4 py-2 mx-1 text-gray-700 disabled:text-gray-500 capitalize bg-gray-200 rounded-md disabled:cursor-not-allowed disabled:hover:bg-gray-200 disabled:hover:text-gray-500 hover:bg-blue-500  hover:text-white duration-300'>
+        <button
+        disabled={currentPage === 1}
+        onClick={()=>handlePaginationButton(currentPage - 1) }
+         className='px-4 py-2 mx-1 text-gray-700 disabled:text-gray-500 capitalize bg-gray-200 rounded-md disabled:cursor-not-allowed disabled:hover:bg-gray-200 disabled:hover:text-gray-500 hover:bg-blue-500  hover:text-white duration-300'>
           <div className='flex items-center -mx-1'>
             <svg
               xmlns='http://www.w3.org/2000/svg'
@@ -157,16 +164,19 @@ const AllJobs = () => {
           {/* page numbers */}
         {pages.map(btnNum => (
           <button
-          onClick={() => handlePagination(btnNum)}
+          onClick={()=> handlePaginationButton(btnNum)}
             key={btnNum}
-            className={`hidden px-4 py-2 mx-1 transition-colors duration-300 transform  rounded-md sm:inline hover:bg-blue-500  hover:text-white`}
+            className={`hidden ${currentPage === btnNum ? 'bg-blue-500 text-white' : ''} px-4 py-2 mx-1 transition-colors duration-300 transform  rounded-md sm:inline hover:bg-blue-500  hover:text-white`}
           >
             {btnNum}
           </button>
         ))}
 
         {/* next button */}
-        <button className='px-4 py-2 mx-1 text-gray-700 transition-colors duration-300 transform bg-gray-200 rounded-md hover:bg-blue-500 disabled:hover:bg-gray-200 disabled:hover:text-gray-500 hover:text-white disabled:cursor-not-allowed disabled:text-gray-500'>
+        <button
+        disabled={currentPage === numberOfPages}
+        onClick={()=>handlePaginationButton(currentPage + 1)}
+        className='px-4 py-2 mx-1 text-gray-700 transition-colors duration-300 transform bg-gray-200 rounded-md hover:bg-blue-500 disabled:hover:bg-gray-200 disabled:hover:text-gray-500 hover:text-white disabled:cursor-not-allowed disabled:text-gray-500'>
           <div className='flex items-center -mx-1'>
             <span className='mx-1'>Next</span>
 

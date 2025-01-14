@@ -210,22 +210,23 @@ const client = new MongoClient(uri, {
 
 
                               // pagination 
-        
-      // get all jobs data for pagination
+
+         // get all jobs data from Db for pagination
       app.get('/all-jobs', async(req,res) => {
-        const size = parseInt(req.query.size)
-        const page = parseInt(req.query.page) - 1
-        console.log(size, page); 
+        const size = parseInt(req.query.size);
+        const page = parseInt(req.query.page) - 1;
+        console.log(size, page);
         const result = await jobsCollection.find().skip(page * size).limit(size).toArray()
         res.send(result)
-      })  
-
-
-      // get all jobs count from Db
-      app.get('/jobs-count', async(req,res) => {
-        const count = await jobsCollection.countDocuments()
-        res.send({count})
-      })
+      })   
+      
+      
+        // get all jobs data count from Db
+        app.get('/jobs-count', async(req,res) => {
+          const count = await jobsCollection.countDocuments()
+          res.send({count})
+        })
+ 
 
 
 
