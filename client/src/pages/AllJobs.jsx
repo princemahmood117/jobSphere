@@ -11,21 +11,23 @@ const AllJobs = () => {
 
     const [jobs,setJobs] = useState([])
 
-    const [itemsPerPage,setItemsPerPage] = useState(10)
+    const [itemsPerPage,setItemsPerPage] = useState(8)
 
     const [count,setCount] = useState(0)
 
     const [currentPage,setCurrentPage] = useState(1)
 
+    const [filter,setFilter] = useState('')
+
 
     // data fetch
     useEffect(()=> {
       const getData = async () => {
-        const {data} = await axios.get(`${import.meta.env.VITE_API_URL}/all-jobs?page=${currentPage}&size=${itemsPerPage}`)
+        const {data} = await axios.get(`${import.meta.env.VITE_API_URL}/all-jobs?page=${currentPage}&size=${itemsPerPage}&filter=${filter}`)
         setJobs(data)
       }
       getData()
-    },[currentPage, itemsPerPage])
+    },[currentPage, itemsPerPage,filter])
 
 
     const handlePaginationButton = (value) => {
@@ -37,11 +39,11 @@ const AllJobs = () => {
     // total data count
     useEffect(()=> {
       const getCount = async () => {
-        const {data} = await axios.get(`${import.meta.env.VITE_API_URL}/jobs-count`)
+        const {data} = await axios.get(`${import.meta.env.VITE_API_URL}/jobs-count?filter=${filter}`)
         setCount(data.count)
       }
       getCount()
-    },[])
+    },[filter])
 
 
     const numberOfPages = Math.ceil(count/itemsPerPage)
@@ -85,17 +87,22 @@ const AllJobs = () => {
          
         <div className='flex flex-col md:flex-row justify-center items-center gap-5 '>
           <div>
-           
+
+            {/* category dropdown */}
             <select
+            onChange={(e)=> {setFilter(e.target.value), setCurrentPage(1)} 
+              
+            }
               name='category'
               id='category'
+              value={filter}
               className='border p-2 rounded-lg'
             >
               <option value=''>Filter By Category</option>
               <option value='Web Development'>Web Development</option>
               <option value='Graphics Design'>Graphics Design</option>
               <option value='Digital Marketing'>Digital Marketing</option>
-              <option value='Digital Marketing'>Game Development</option>
+              <option value='Game Development'>Game Development</option>
             </select>
           </div>
 
