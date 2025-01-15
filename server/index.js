@@ -217,11 +217,13 @@ const client = new MongoClient(uri, {
         const page = parseInt(req.query.page) - 1;
         const sort = req.query.sort;
         const filter = req.query.filter;
-        let query = {}
+        const search = req.query.search;
+
+        let query = {
+          job_title : {$regex : search, $options : 'i'}
+        }
         if(filter) {
-          query = {
-            category : filter
-          }
+          query.category = filter
         }
 
         let options = {}
@@ -231,7 +233,8 @@ const client = new MongoClient(uri, {
               deadline : sort === 'asc' ? 1 : -1            }
           }
         }
-        console.log(size, page);
+        
+        
         const result = await jobsCollection.find(query,options).skip(page * size).limit(size).toArray()
         res.send(result)
       })   
@@ -240,12 +243,23 @@ const client = new MongoClient(uri, {
         // get all jobs data count from Db
         app.get('/jobs-count', async(req,res) => {
           const filter = req.query.filter;
-          let query = {}
-          if(filter) {
-            query = {
-              category : filter
-            }
-          }
+          const search = req.query.search;
+
+          // before using search
+          // let query = {}
+          // if(filter) {
+          //   query = {
+          //     category : filter
+          //   }
+          // }
+
+          
+        let query = {
+          job_title : {$regex : search, $options : 'i'}
+        }
+        if(filter) {
+          query.category = filter
+        }
           const count = await jobsCollection.countDocuments(query)
           res.send({count})
         })

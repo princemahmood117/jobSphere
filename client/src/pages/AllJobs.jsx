@@ -21,36 +21,53 @@ const AllJobs = () => {
 
     const [sort,setSort] = useState('')
 
+    const [search,setSearch] = useState('')
+
+    const [searchText,setSearchText] = useState('')
+    
+
 
     // data fetch
     useEffect(()=> {
       const getData = async () => {
-        const {data} = await axios.get(`${import.meta.env.VITE_API_URL}/all-jobs?page=${currentPage}&size=${itemsPerPage}&filter=${filter}&sort=${sort}`)
+        const {data} = await axios.get(`${import.meta.env.VITE_API_URL}/all-jobs?page=${currentPage}&size=${itemsPerPage}&filter=${filter}&sort=${sort}&search=${search}`)
         setJobs(data)
       }
       getData()
-    },[currentPage, itemsPerPage, filter, sort])
+    },[currentPage, itemsPerPage, filter, sort, search])
 
 
     const handlePaginationButton = (value) => {
-      console.log(value);
       setCurrentPage(value) // ekhon kon page e achi
     }
 
     const handleReset = () => {
       setFilter('')
       setSort('')
+      setSearch('')
+      setSearchText('')
     }
 
+    
+    const handleSearch = (e) => {
+      e.preventDefault()
+
+      // চাইলে নিচের দুই লাইন ও ইউজ করে ভ্যালু নিয়ে কাজ করা যায়
+      // const text = e.target.search.value
+      // setSearch(text)
+
+      setSearch(searchText)
+    }
+    
 
     // total data count
     useEffect(()=> {
       const getCount = async () => {
-        const {data} = await axios.get(`${import.meta.env.VITE_API_URL}/jobs-count?filter=${filter}`)
+        const {data} = await axios.get(`${import.meta.env.VITE_API_URL}/jobs-count?filter=${filter}&search=${search}`)
         setCount(data.count)
       }
       getCount()
-    },[filter])
+    },[filter,search])
 
 
     const numberOfPages = Math.ceil(count/itemsPerPage)
@@ -114,9 +131,11 @@ const AllJobs = () => {
             </select>
           </div>
 
-          <form>
+          <form onSubmit={handleSearch}>
             <div className='flex  overflow-hidden border rounded-lg focus-within:ring focus-within:ring-opacity-40 focus-within:border-blue-400 focus-within:ring-blue-300'>
               <input
+              onChange={(e)=> setSearchText(e.target.value) }
+              value={searchText}
                 className='px-6 py-2 text-gray-700 placeholder-gray-500 bg-white outline-none focus:placeholder-transparent'
                 type='text'
                 name='search'
