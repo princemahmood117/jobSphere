@@ -60,12 +60,12 @@ const UpdateJob = () => {
         `/job/${_id}`,
         jobData
       )
-      console.log(data)
+      // console.log(data)
       toast.success('Job Data Updated Successfully!')
       navigate('/my-posted-jobs')
     } 
     catch (err) {
-      console.log(err)
+      // console.log(err)
       toast.error(err.message)
     }
   }

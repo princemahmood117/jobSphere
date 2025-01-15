@@ -30,16 +30,16 @@ const Register = () => {
 
     try {
        const result = await signInWithGoogle()
-       console.log(result.user);
+      //  console.log(result.user);
       const {data} = await axios.post(`${import.meta.env.VITE_API_URL}/jwt`, {email: result?.user?.email},{withCredentials:true})
-      console.log(data);
+      // console.log(data);
        toast.success('Sign Up successful')
       //  navigate('/')
       navigate(from, {replace:true}) // যেহেতু এখন state নিয়ে কাজ হবে লগ-ইন/হোম এ যাওয়ার সময়, তাই state এর ভিত্তি তেই রি-ডাইরেক্ট করা ভালো
     }
  
     catch (error) {
-     console.log(error);
+    //  console.log(error);
      toast.error(error.message)
     }
  
@@ -55,7 +55,7 @@ const Register = () => {
     const email = form.email.value;
     const password = form.password.value;
 
-    console.log({name,photo,email,password});
+    // console.log({name,photo,email,password});
 
     try {
 
@@ -65,16 +65,16 @@ const Register = () => {
       // optimistic ui update
       setUser({...result?.user,photoURL:photo, displayName:name})
 
-      console.log(result.user);
+      // console.log(result.user);
       const {data} = await axios.post(`${import.meta.env.VITE_API_URL}/jwt`, {email: result?.user?.email},{withCredentials:true})
-      console.log(data);
+      // console.log(data);
 
       toast.success('Sign Up Successfull')
       // navigate('/')
       navigate(from, {replace:true})
     }
     catch (error) {
-      console.log(error);
+      // console.log(error);
       toast.error(error.message)
     }
 

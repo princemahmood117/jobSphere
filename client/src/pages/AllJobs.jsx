@@ -73,6 +73,7 @@ const AllJobs = () => {
     const numberOfPages = Math.ceil(count/itemsPerPage)
 
     const pages = [...Array(numberOfPages).keys().map(e => e + 1 )]
+   
 
 
 

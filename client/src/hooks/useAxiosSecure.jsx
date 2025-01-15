@@ -18,7 +18,7 @@ const useAxiosSecure = () => {
 
     // for receiving response from the server side
     axiosSecure.interceptors.response.use( res => {
-        console.log('response ashar agei interceptor diye thamiye dekhtesi vitor e ki ache',res);
+        // console.log('response ashar agei interceptor diye thamiye dekhtesi vitor e ki ache',res);
         return res
     },
 

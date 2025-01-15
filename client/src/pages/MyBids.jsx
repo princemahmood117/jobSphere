@@ -24,12 +24,12 @@ const MyBids = () => {
     setBids(data)
     getData()
   }
-  console.log(bids);
+  // console.log(bids);
 
 
   const handleComplete = async(id,status) => {
     const {data} = await axiosSecure.patch(`/bid/${id}`,{status})
-    console.log(data);
+    // console.log(data);
     getData()
   }
 

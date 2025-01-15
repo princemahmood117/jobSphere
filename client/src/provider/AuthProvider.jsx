@@ -37,7 +37,7 @@ const AuthProvider = ({children}) => {
     const logOut = async() => {
         setLoading(true)
         const {data} = await axios.get(`${import.meta.env.VITE_API_URL}/logout`, {withCredentials : true})
-        console.log(data);
+        // console.log(data);
         return signOut(auth)
     }
 
@@ -53,7 +53,7 @@ const AuthProvider = ({children}) => {
     useEffect(()=> {
         const unsubscribe = onAuthStateChanged(auth,(currentUser) => {
             setUser(currentUser)
-            console.log('CurrentUser-->', currentUser)
+            // console.log('CurrentUser-->', currentUser)
             setLoading(false)
         })
         return () => {

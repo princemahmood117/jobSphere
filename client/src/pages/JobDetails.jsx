@@ -61,7 +61,7 @@ const JobDetails = () => {
 
         try {
           const {data} = await axiosSecure.post(`/bid`, bidData)
-          console.log(data);
+          // console.log(data); 
           toast.success('bid placed successfully')
           navigate('/my-bids')
         }

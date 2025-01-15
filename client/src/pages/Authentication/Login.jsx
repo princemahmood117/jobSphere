@@ -33,9 +33,9 @@ const Login = () => {
 
    try {
       const result = await signInWithGoogle()
-      console.log(result.user);
+      // console.log(result.user);
       const {data} = await axios.post(`${import.meta.env.VITE_API_URL}/jwt`, {email: result?.user?.email},{withCredentials:true})
-      console.log(data);
+      // console.log(data);
 
       toast.success('Login successful')
       // navigate('/')
@@ -43,7 +43,7 @@ const Login = () => {
    }
 
    catch (error) {
-    console.log(error);
+    // console.log(error);
     toast.error(error.message)
    }
 
@@ -60,9 +60,9 @@ const Login = () => {
 
     try {
         const result = await signIn(email,password)
-        console.log(result.user);
+        // console.log(result.user);
         const {data} = await axios.post(`${import.meta.env.VITE_API_URL}/jwt`, {email: result?.user?.email},{withCredentials:true})
-        console.log(data);
+        // console.log(data);
         
         toast.success('login successful')
         // navigate('/')
@@ -70,7 +70,7 @@ const Login = () => {
     }
 
     catch(err) {
-      console.log(err);
+      // console.log(err);
       toast.error(err.message)
     }
 

@@ -8,7 +8,7 @@ const app = express()
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 const corsOption = {
-    origin : ['http://localhost:5173'],
+    origin : ['http://localhost:5173','https://job-sphere-16a8f.web.app', 'https://job-sphere-16a8f.firebaseapp.com','https://console.firebase.google.com/u/0/','https://console.firebase.google.com/u/0/project/job-sphere-16a8f/overview','https://console.firebase.google.com/u/0/project/job-sphere-16a8f/authentication/users','https://jwt.io','https://jobs-sphere.netlify.app','https://harmonious-pasca-4c361b.netlify.app'],
     credentials : true,
     optionSuccessStatus : 200,
 }
@@ -20,20 +20,20 @@ app.use(cookieParser())
 
 // verify jwt token
 const verifyToken = (req,res,next) => {
-  console.log('this is a middleware');
+  
        // token verification 
        const token = req.cookies?.token;  // token is received from the browser's cookie
-       console.log('token from browser', token);
+      //  console.log('token from browser', token);
        if(!token) return res.status(401).send({message : "token nai Dhukte parba naaaa"})
 
        if(token) {
          jwt.verify(token, process.env.ACCESS_TOKEN, (err,decoded)=> {
            if(err) {
-            console.log(err);
+            // console.log(err);
              return res.status(401).send({message : "Vul token niye ashcho"})
            }
 
-           console.log(decoded);
+          //  console.log(decoded);
            req.user = decoded
            next()
          })
@@ -111,7 +111,7 @@ const client = new MongoClient(uri, {
       // get jobs posted by specific user using email
       app.get('/jobs/:email',verifyToken, async(req,res) => {
         const tokenEmail = req.user.email;
-        console.log('this email is from inside the token data',tokenEmail);
+        // console.log('this email is from inside the token data',tokenEmail);
 
         const email = req.params.email;
 
@@ -230,7 +230,8 @@ const client = new MongoClient(uri, {
         if(sort) {
           options = {
             sort : {
-              deadline : sort === 'asc' ? 1 : -1            }
+              deadline : sort === 'asc' ? 1 : -1
+            }
           }
         }
         
@@ -252,7 +253,6 @@ const client = new MongoClient(uri, {
           //     category : filter
           //   }
           // }
-
           
         let query = {
           job_title : {$regex : search, $options : 'i'}
@@ -264,18 +264,10 @@ const client = new MongoClient(uri, {
           res.send({count})
         })
  
-
-
-
-
-
-
-      await client.db("admin").command({ ping: 1 });
-      console.log("Pinged your deployment. You successfully connected to MongoDB!");
+      // await client.db("admin").command({ ping: 1 });
+      // console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } 
     
-
-
     finally {
       // Ensures that the client will close when you finish/error
     //   await client.close();
@@ -293,6 +285,6 @@ app.get('/', (req,res) => {
 
 
 app.listen(port, ()=> {
-    console.log(`server is running on port ${port}`);
+    // console.log(`server is running on port ${port}`);
 })
 

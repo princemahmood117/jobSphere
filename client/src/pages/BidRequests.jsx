@@ -17,7 +17,7 @@ const BidRequests = () => {
   const queryClient = useQueryClient()
 
   //  fetch data using tanstack query
-  const {data: bids = [],isLoading,refetch} = useQuery({
+  const {data: bids = [],isLoading} = useQuery({
 
     queryFn: () => getData(),
     queryKey: ["bids", user?.email],
@@ -42,12 +42,12 @@ const BidRequests = () => {
   const {mutateAsync} = useMutation({
     mutationFn : async ({id,status}) => {
       const { data } = await axiosSecure.patch(`/bid/${id}`, { status });
-      console.log(data);
+      // console.log(data);
       return data;  
     },
 
     onSuccess : () =>  {
-      console.log('Data update hoise');
+      // console.log('Data update hoise');
       toast.success('status updated')
       // refetch()
 
@@ -60,7 +60,7 @@ const BidRequests = () => {
   })
 
   const handleStatus = async (id, prevStatus, status) => {
-    console.log(id, prevStatus, status);
+    // console.log(id, prevStatus, status);
 
     if (prevStatus === status) return toast.error("Action already done");
     await mutateAsync({id,status})
