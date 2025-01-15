@@ -215,6 +215,7 @@ const client = new MongoClient(uri, {
       app.get('/all-jobs', async(req,res) => {
         const size = parseInt(req.query.size);
         const page = parseInt(req.query.page) - 1;
+        const sort = req.query.sort;
         const filter = req.query.filter;
         let query = {}
         if(filter) {
@@ -222,8 +223,16 @@ const client = new MongoClient(uri, {
             category : filter
           }
         }
+
+        let options = {}
+        if(sort) {
+          options = {
+            sort : {
+              deadline : sort === 'asc' ? 1 : -1            }
+          }
+        }
         console.log(size, page);
-        const result = await jobsCollection.find(query).skip(page * size).limit(size).toArray()
+        const result = await jobsCollection.find(query,options).skip(page * size).limit(size).toArray()
         res.send(result)
       })   
       

@@ -19,20 +19,27 @@ const AllJobs = () => {
 
     const [filter,setFilter] = useState('')
 
+    const [sort,setSort] = useState('')
+
 
     // data fetch
     useEffect(()=> {
       const getData = async () => {
-        const {data} = await axios.get(`${import.meta.env.VITE_API_URL}/all-jobs?page=${currentPage}&size=${itemsPerPage}&filter=${filter}`)
+        const {data} = await axios.get(`${import.meta.env.VITE_API_URL}/all-jobs?page=${currentPage}&size=${itemsPerPage}&filter=${filter}&sort=${sort}`)
         setJobs(data)
       }
       getData()
-    },[currentPage, itemsPerPage,filter])
+    },[currentPage, itemsPerPage, filter, sort])
 
 
     const handlePaginationButton = (value) => {
       console.log(value);
       setCurrentPage(value) // ekhon kon page e achi
+    }
+
+    const handleReset = () => {
+      setFilter('')
+      setSort('')
     }
 
 
@@ -84,6 +91,7 @@ const AllJobs = () => {
     <div className='container px-6 py-10 mx-auto min-h-[calc(100vh-306px)] flex flex-col justify-between'>
       <p>total data length : {count}</p>
       <div>
+      
          
         <div className='flex flex-col md:flex-row justify-center items-center gap-5 '>
           <div>
@@ -123,8 +131,10 @@ const AllJobs = () => {
           </form>
           <div>
             <select
-              name='category'
-              id='category'
+            onChange={(e)=> {setSort(e.target.value), setCurrentPage(1)} }
+            value={sort}
+              name='sort'
+              id='sort'
               className='border p-2 rounded-md'
             >
               <option value=''>Sort By Deadline</option>
@@ -132,7 +142,7 @@ const AllJobs = () => {
               <option value='asc'>Ascending Order</option>
             </select>
           </div>
-          <button className='btn'>Reset</button>
+          <button onClick={handleReset} type="reset" className='btn'>Reset</button>
         </div>
         <div className='grid grid-cols-1 gap-8 mt-8 xl:mt-16 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
           {jobs.map(job => (
