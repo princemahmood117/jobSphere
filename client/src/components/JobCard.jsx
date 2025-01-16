@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 // eslint-disable-next-line react/prop-types
 const JobCard = ({job}) => {
 
-  const {category,job_title,deadline,description,min_price,max_price,_id} = job || {};
+  const {category,job_title,deadline,description,min_price,max_price,_id, bid_count} = job || {};
 
     return (
       <Link to={`/job/${_id}`} className='w-full max-w-sm px-4 py-3 bg-white rounded-md shadow-md hover:scale-[1.05] transition-all cursor-pointer'>
@@ -28,6 +28,9 @@ const JobCard = ({job}) => {
           </p>
           <p className='mt-2 text-sm font-bold text-gray-600 '>
             Range: ${min_price} -  ${max_price}
+          </p>
+          <p className='mt-2 text-sm font-bold text-gray-600 '>
+           Total bids : {bid_count}
           </p>
         </div>
       </Link>

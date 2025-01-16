@@ -28,13 +28,16 @@ const AddJob = () => {
           const max_price = parseInt(form.max_price.value);
           const description = form.description.value;
   
+          // data for adding jobs
           const jobData = {
+            
                 job_title,
                 deadline,
                 category,
                 min_price,
                 max_price,
                 description,
+                bid_count : 0,
 
                 buyer : {
                     email,                    // the person who will be posting the job as owner
@@ -43,7 +46,7 @@ const AddJob = () => {
                 },
 
           }
-          console.table(jobData);
+          // console.table(jobData);
   
           try {
             const {data} = await axios.post(`${import.meta.env.VITE_API_URL}/job`, jobData)

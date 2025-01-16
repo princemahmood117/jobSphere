@@ -6,7 +6,7 @@ import { useState } from "react";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
-import axios from "axios";
+// import axios from "axios";
 import toast from "react-hot-toast";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 
@@ -41,7 +41,7 @@ const JobDetails = () => {
         const status = 'Pending'
         const deadline = startDate;
 
-
+        // data for bids
         const bidData = {
             jobId,
             price,
@@ -49,7 +49,7 @@ const JobDetails = () => {
             comment,
             job_title,
             category,
-            email,
+            email,  // email of the person who will do the job
             buyer : {
               email : buyer?.email,
               name : buyer?.name,

@@ -156,11 +156,11 @@ const client = new MongoClient(uri, {
 
       
 
-      // save bid data into database
+      // save a bid data into database
       app.post('/bid', async(req,res) => {
-        const bidData = req.body; 
-        // console.log(bidData);  // data will be coming from front-end inside the req.body
+        const bidData = req.body; // console.log(bidData);  // data will be coming from front-end inside the req.body
 
+        
         // check if dupicate bid is present already in db
         const query = {
           email : bidData.email,
@@ -172,6 +172,17 @@ const client = new MongoClient(uri, {
          }
          
         const result = await bidsCollection.insertOne(bidData);
+
+        // update bid count in jobsCollection
+        const updateDoc = {
+            $inc : {
+              bid_count : 1
+            }
+  
+        }
+        const jobQuery = {_id : new ObjectId(bidData.jobId)} 
+        const updateBidCount = await jobsCollection.updateOne(jobQuery, updateDoc)
+        console.log(updateBidCount);
         res.send(result)
       })
 
@@ -265,7 +276,7 @@ const client = new MongoClient(uri, {
         })
  
       // await client.db("admin").command({ ping: 1 });
-      // console.log("Pinged your deployment. You successfully connected to MongoDB!");
+      console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } 
     
     finally {
