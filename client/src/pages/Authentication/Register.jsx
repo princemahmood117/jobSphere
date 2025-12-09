@@ -2,18 +2,17 @@ import { Link, useLocation, useNavigate } from "react-router-dom"
 import Lottie from "lottie-react";
 import register from '../../assets/images/register.json'
 import logo from '../../assets/images/logo.png'
-import {  useEffect } from "react";
-// import { AuthContext } from "../../provider/AuthProvider";
+import {  useContext, useEffect } from "react";
 import toast from "react-hot-toast";
 import { ImSpinner7 } from "react-icons/im";
 import axios from "axios";
-import useAuth from "../../hooks/useAuth";
 import { BallTriangle } from "react-loader-spinner";
+import { AuthContext } from "../../provider/AuthProvider";
 const Register = () => {
 
-  // const {user,setUser,createUser,signInWithGoogle,updateUserProfile,loading} = useContext(AuthContext)
+  const {user,setUser,createUser,signInWithGoogle,updateUserProfile,loading} = useContext(AuthContext)
 
-  const {user,setUser,createUser,signInWithGoogle,updateUserProfile,loading} = useAuth()
+ 
 
   const navigate = useNavigate()
   const location = useLocation()
@@ -29,17 +28,12 @@ const Register = () => {
   const handleGoogleSignIn = async () => {
 
     try {
-       const result = await signInWithGoogle()
-      //  console.log(result.user);
-      const {data} = await axios.post(`${import.meta.env.VITE_API_URL}/jwt`, {email: result?.user?.email},{withCredentials:true})
-      // console.log(data);
-       toast.success('Sign Up successful')
-      //  navigate('/')
+       signInWithGoogle()   
+      toast.success('Sign Up successful')
       navigate(from, {replace:true}) // যেহেতু এখন state নিয়ে কাজ হবে লগ-ইন/হোম এ যাওয়ার সময়, তাই state এর ভিত্তি তেই রি-ডাইরেক্ট করা ভালো
     }
  
     catch (error) {
-    //  console.log(error);
      toast.error(error.message)
     }
  
@@ -66,15 +60,15 @@ const Register = () => {
       setUser({...result?.user,photoURL:photo, displayName:name})
 
       // console.log(result.user);
-      const {data} = await axios.post(`${import.meta.env.VITE_API_URL}/jwt`, {email: result?.user?.email},{withCredentials:true})
+      // const {data} = await axios.post(`${import.meta.env.VITE_API_URL}/jwt`, {email: result?.user?.email},{withCredentials:true})
       // console.log(data);
 
       toast.success('Sign Up Successfull')
-      // navigate('/')
+      
       navigate(from, {replace:true})
     }
     catch (error) {
-      // console.log(error);
+  
       toast.error(error.message)
     }
 

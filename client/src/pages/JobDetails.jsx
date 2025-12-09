@@ -13,6 +13,7 @@ import useAxiosSecure from "../hooks/useAxiosSecure";
 const JobDetails = () => {
     
     const job = useLoaderData()
+    
     const {category,job_title,deadline,description,min_price,max_price,_id,buyer} = job || {};
 
     const axiosSecure = useAxiosSecure()

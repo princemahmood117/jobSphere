@@ -1,5 +1,5 @@
 import Lottie from "lottie-react";
-import login from "../assets/faq.json";
+import faq from "../assets/faq.json";
 
 const Faq = () => {
   return (
@@ -9,7 +9,7 @@ const Faq = () => {
       </h1>
       <div className="flex md:px-6 px-4 justify-around">
         <div className="w-1/3 min-h-screen hidden md:block">
-          <Lottie style={{ height: "500px"}} animationData={login}></Lottie>
+          <Lottie style={{ height: "500px"}} animationData={faq}></Lottie>
         </div>
 
         <div className="md:w-1/2 w-full px-3">
